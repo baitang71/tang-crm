@@ -9,4 +9,6 @@ public interface ActivityService {
     boolean save(Activity activity);
 
     PageListVo<Activity> pageList(Map<String, Object> data);
+
+    void deleteByIds(String[] ids);
 }

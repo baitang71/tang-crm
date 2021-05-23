@@ -4,9 +4,12 @@ import com.cqupt.utils.DateTimeUtil;
 import com.cqupt.utils.UUIDUtil;
 import com.cqupt.vo.PageListVo;
 import com.cqupt.workbench.dao.ActivityDao;
+import com.cqupt.workbench.dao.ActivityRemarkDao;
 import com.cqupt.workbench.domain.Activity;
+import com.cqupt.workbench.exception.ActivityDeleteException;
 import com.cqupt.workbench.service.ActivityService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -16,6 +19,8 @@ import java.util.Map;
 public class ActivityServiceImpl implements ActivityService {
     @Resource
     private ActivityDao activityDao;
+    @Resource
+    private ActivityRemarkDao activityRemarkDao;
 
     @Override
     public boolean save(Activity activity) {
@@ -39,5 +44,21 @@ public class ActivityServiceImpl implements ActivityService {
         activityVo.setTotal(total);
         activityVo.setList(activityList);
         return activityVo;
+    }
+
+    @Transactional(
+            rollbackFor = ActivityDeleteException.class
+    )
+    @Override
+    public void deleteByIds(String[] ids) {
+        int remarkCount=activityRemarkDao.selectCountByAids(ids);
+        int dRemarkCount=activityRemarkDao.deleteByAids(ids);
+        int dActivityCount=activityDao.deleteByIds(ids);
+        if(remarkCount!=dRemarkCount){
+            throw new ActivityDeleteException("删除与市场活动相关的备注失败");
+        }
+        if(dActivityCount!=ids.length){
+            throw new ActivityDeleteException("删除市场活动失败");
+        }
     }
 }

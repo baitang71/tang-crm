@@ -11,4 +11,6 @@ public interface ActivityDao {
     List<Activity> pageList(Map<String, Object> data);
 
     int pageListCount(Map<String, Object> data);
+
+    int deleteByIds(String[] ids);
 }

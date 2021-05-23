@@ -66,4 +66,18 @@ public class ActivityController {
         PageListVo<Activity> reData=activityService.pageList(data);
         return reData;
     }
+
+    @RequestMapping("/delete.do")
+    @ResponseBody
+    public Map<String,Object> doDelete(String[] ids){
+        Map<String,Object> data=new HashMap<>();
+        try{
+            activityService.deleteByIds(ids);
+            data.put("success",true);
+        }catch (Exception e){
+            System.out.println("======>"+e.getMessage());
+            data.put("success",false);
+        }
+        return data;
+    }
 }
