@@ -22,7 +22,21 @@ request.getContextPath() + "/";
 <script type="text/javascript" src="jquery/bs_pagination/en.js"></script>
 <script type="text/javascript">
 
+	/*
+	* pageList($("#activityPage").bs_pagination('getOption', 'currentPage')
+	* 			,$("#activityPage").bs_pagination('getOption', 'rowsPerPage'));
+	*
+	* */
 	$(function(){
+
+		$(".time").datetimepicker({
+			minView: "month",
+			language:  'zh-CN',
+			format: 'yyyy-mm-dd',
+			autoclose: true,
+			todayBtn: true,
+			pickerPosition: "bottom-left"
+		});
 
 		$("#editBtn").click(function (){
 			var $cbs=$("input[name=cb]:checked")
@@ -49,6 +63,7 @@ request.getContextPath() + "/";
 							$("#edit-owner").html(html)
 
 							$("#edit-id").val(data.activity.id)
+							$("#edit-cost").val(data.activity.cost)
 							$("#edit-name").val(data.activity.name)
 							$("#edit-startDate").val(data.activity.startDate)
 							$("#edit-endDate").val(data.activity.endDate)
@@ -69,7 +84,7 @@ request.getContextPath() + "/";
 				data:{
 					"id":$("#edit-id").val(),
 					"owner":$.trim($("#edit-owner").val()),
-					"name":$.trim($("#eidt-name").val()),
+					"name":$.trim($("#edit-name").val()),
 					"startDate":$.trim($("#edit-startDate").val()),
 					"endDate":$.trim($("#edit-endDate").val()),
 					"cost":$.trim($("#edit-cost").val()),
@@ -80,7 +95,8 @@ request.getContextPath() + "/";
 				success:function (data) {
 					if(data.success){
 						$("#editActivityModal").modal("hide")
-						pageList(1,4)
+						pageList($("#activityPage").bs_pagination('getOption', 'currentPage')
+								,$("#activityPage").bs_pagination('getOption', 'rowsPerPage'));
 						$("#editActivityForm")[0].reset()
 					}else{
 						alert("修改市场活动失败")
@@ -106,7 +122,7 @@ request.getContextPath() + "/";
 					if(data.success){
 						//关闭模态窗口，刷新市场活动列表
 						$("#createActivityModal").modal("hide")
-						pageList(1,4)
+						pageList(1,$("#activityPage").bs_pagination('getOption', 'rowsPerPage'));
 						//清除之前填的数据
 						$("#saveActivityForm")[0].reset()
 					}else{
@@ -117,15 +133,6 @@ request.getContextPath() + "/";
 		})
 		
 		$("#addBtn").click(function (){
-
-			$(".time").datetimepicker({
-				minView: "month",
-				language:  'zh-CN',
-				format: 'yyyy-mm-dd',
-				autoclose: true,
-				todayBtn: true,
-				pickerPosition: "bottom-left"
-			});
 			//发送添加市场活动请求
 			$.ajax({
 				url:"workbench/activity/selectAll.do",
@@ -234,7 +241,7 @@ request.getContextPath() + "/";
 						success:function (data) {
 							if(data.success){
 								alert("删除成功")
-								pageList(1,4)
+								pageList(1,$("#activityPage").bs_pagination('getOption', 'rowsPerPage'));
 							}else{
 								alert("删除失败")
 							}
@@ -346,11 +353,11 @@ request.getContextPath() + "/";
 						<div class="form-group">
 							<label for="edit-startTime" class="col-sm-2 control-label">开始日期</label>
 							<div class="col-sm-10" style="width: 300px;">
-								<input type="text" class="form-control time" id="edit-startDate" >
+								<input type="text" class="form-control time" id="edit-startDate" readonly>
 							</div>
 							<label for="edit-endTime" class="col-sm-2 control-label">结束日期</label>
 							<div class="col-sm-10" style="width: 300px;">
-								<input type="text" class="form-control time" id="edit-endDate" >
+								<input type="text" class="form-control time" id="edit-endDate" readonly>
 							</div>
 						</div>
 						
