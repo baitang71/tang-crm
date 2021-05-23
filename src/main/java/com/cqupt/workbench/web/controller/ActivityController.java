@@ -69,7 +69,9 @@ public class ActivityController {
 
     @RequestMapping("/delete.do")
     @ResponseBody
-    public Map<String,Object> doDelete(String[] ids){
+    public Map<String,Object> doDelete(HttpServletRequest request){
+        String[] ids=request.getParameterValues("id");
+        //System.out.println(ids);
         Map<String,Object> data=new HashMap<>();
         try{
             activityService.deleteByIds(ids);

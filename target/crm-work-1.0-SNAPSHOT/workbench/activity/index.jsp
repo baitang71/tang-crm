@@ -146,6 +146,37 @@ request.getContextPath() + "/";
 		$("#list-Body").on("click",$("input[name=cb]"),function () {
 			$("#check-all").prop("checked",$("input[name=cb]").length==$("input[name=cb]:checked").length)
 		})
+
+		$("#deleteBtn").click(function () {
+			var $cbs=$("input[name=cb]:checked");
+			if($cbs.length==0){
+				alert("请勾选要删除的市场活动")
+			}else{
+				var param=""
+				for (var i=0;i<$cbs.length;i++){
+					param+="id="+$($cbs[i]).val()
+					if(i<$cbs.length-1){
+						param+="&"
+					}
+				}
+				if(confirm("确定要删除吗?")){
+					$.ajax({
+						url:"workbench/activity/delete.do",
+						data:param,
+						dataType:"json",
+						method:"post",
+						success:function (data) {
+							if(data.success){
+								alert("删除成功")
+								pageList(1,4)
+							}else{
+								alert("删除失败")
+							}
+						}
+					})
+				}
+			}
+		})
 		pageList(1,4);
 	});
 	
@@ -335,7 +366,7 @@ request.getContextPath() + "/";
 				<div class="btn-group" style="position: relative; top: 18%;">
 				  <button type="button" class="btn btn-primary" id="addBtn"><span class="glyphicon glyphicon-plus"></span> 创建</button>
 				  <button type="button" class="btn btn-default" data-toggle="modal" data-target="#editActivityModal"><span class="glyphicon glyphicon-pencil"></span> 修改</button>
-				  <button type="button" class="btn btn-danger"><span class="glyphicon glyphicon-minus"></span> 删除</button>
+				  <button type="button" class="btn btn-danger" id="deleteBtn"><span class="glyphicon glyphicon-minus"></span> 删除</button>
 				</div>
 				
 			</div>
