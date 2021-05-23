@@ -82,4 +82,31 @@ public class ActivityController {
         }
         return data;
     }
+
+    @RequestMapping("/getListAndActivity.do")
+    @ResponseBody
+    public Map<String,Object> doGet(String id){
+        List<User> users=userService.selectAll();
+        Activity activity=activityService.selectById(id);
+        Map<String,Object> data=new HashMap<>();
+        if (users!=null&&activity!=null){
+            data.put("success",true);
+            data.put("uList",users);
+            data.put("activity",activity);
+        }else{
+            data.put("success",false);
+        }
+        return data;
+    }
+
+    @RequestMapping("/updateActivity.do")
+    @ResponseBody
+    public Map<String,Object> doGet(Activity activity,HttpServletRequest request){
+        String editName=((User)request.getSession().getAttribute("user")).getName();
+        activity.setEditBy(editName);
+        Boolean flag=activityService.update(activity);
+        Map<String,Object> data=new HashMap<>();
+        data.put("success",flag);
+        return data;
+    }
 }

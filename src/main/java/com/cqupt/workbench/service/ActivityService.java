@@ -11,4 +11,8 @@ public interface ActivityService {
     PageListVo<Activity> pageList(Map<String, Object> data);
 
     void deleteByIds(String[] ids);
+
+    Activity selectById(String id);
+
+    Boolean update(Activity activity);
 }

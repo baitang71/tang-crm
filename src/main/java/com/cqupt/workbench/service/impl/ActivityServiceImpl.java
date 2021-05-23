@@ -61,4 +61,22 @@ public class ActivityServiceImpl implements ActivityService {
             throw new ActivityDeleteException("删除市场活动失败");
         }
     }
+
+    @Override
+    public Activity selectById(String id) {
+        Activity activity=activityDao.selectById(id);
+        return activity;
+    }
+
+    @Override
+    public Boolean update(Activity activity) {
+        boolean flag=true;
+        String editTime= DateTimeUtil.getSysTime();
+        activity.setEditTime(editTime);
+        int n=activityDao.update(activity);
+        if (n!=1){
+            flag=false;
+        }
+        return flag;
+    }
 }
