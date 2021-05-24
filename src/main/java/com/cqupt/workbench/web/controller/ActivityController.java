@@ -144,4 +144,12 @@ public class ActivityController {
         Map<String,Object> data=activityService.saveRemark(aid,noteContent,createName);
         return data;
     }
+
+    @RequestMapping("/updateRemark.do")
+    @ResponseBody
+    public Map<String,Object> doUpdateRemark(String id,String noteContent,HttpServletRequest request){
+        String editName=((User)request.getSession().getAttribute("user")).getName();
+        Map<String,Object> data=activityService.updateRemark(id,noteContent,editName);
+        return data;
+    }
 }

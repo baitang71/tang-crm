@@ -196,6 +196,7 @@ request.getContextPath() + "/";
 						showRowsDefaultInfo: true,
 
 						onChangePage : function(event, data){
+							$("#check-all").prop("checked",false);
 							pageList(data.currentPage , data.rowsPerPage);
 						}
 					});

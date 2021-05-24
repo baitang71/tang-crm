@@ -128,4 +128,22 @@ public class ActivityServiceImpl implements ActivityService {
         return data;
     }
 
+    @Override
+    public Map<String, Object> updateRemark(String id, String noteContent, String editName) {
+        Map<String,Object> data=new HashMap<>();
+        ActivityRemark activityRemark=new ActivityRemark();
+        activityRemark.setId(id);
+        activityRemark.setNoteContent(noteContent);
+        activityRemark.setEditBy(editName);
+        activityRemark.setEditTime(DateTimeUtil.getSysTime());
+        activityRemark.setEditFlag("1");
+        int n=activityRemarkDao.updateRemark(activityRemark);
+        if (n==1){
+            data.put("activityRemark",activityRemark);
+            data.put("success",true);
+        }else{
+            data.put("success",false);
+        }
+        return data;
+    }
 }

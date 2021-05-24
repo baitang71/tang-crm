@@ -79,10 +79,10 @@ String basePath = request.getScheme() + "://" +
 							html+='<div class="remarkDiv" style="height: 60px;" id="'+data.activityRemark.id+'">';
 							html+='<img title="zhangsan" src="image/user-thumbnail.png" style="width: 30px; height:30px;">';
 							html+='<div style="position: relative; top: -40px; left: 40px;" >';
-							html+='<h5>'+data.activityRemark.noteContent+'</h5>';
-							html+='<font color="gray">市场活动</font> <font color="gray">-</font> <b>'+'${activity.name}'+'</b> <small style="color: gray;"> '+(data.activityRemark.createTime)+' 由'+(data.activityRemark.createBy)+'</small>';
+							html+='<h5 id="h'+data.activityRemark.id+'">'+data.activityRemark.noteContent+'</h5>';
+							html+='<font color="gray">市场活动</font> <font color="gray">-</font> <b>'+'${activity.name}'+'</b> <small style="color: gray;" id="s'+data.activityRemark.id+'"> '+(data.activityRemark.createTime)+' 由'+(data.activityRemark.createBy)+'</small>';
 							html+='<div style="position: relative; left: 500px; top: -30px; height: 30px; width: 100px; display: none;">';
-							html+='<a class="myHref" href="javascript:void(0);" onclick=""><span class="glyphicon glyphicon-edit" style="font-size: 20px; color: #FF0000;"></span></a>';
+							html+='<a class="myHref" href="javascript:void(0);" onclick="updateRemark(\''+data.activityRemark.id+'\')"><span class="glyphicon glyphicon-edit" style="font-size: 20px; color: #FF0000;"></span></a>';
 							html+='&nbsp;&nbsp;&nbsp;&nbsp;';
 							html+='<a class="myHref" href="javascript:void(0);" onclick="removeRemark(\''+data.activityRemark.id+'\')"><span class="glyphicon glyphicon-remove" style="font-size: 20px; color: #FF0000;"></span></a>';
 							html+='</div>';
@@ -97,6 +97,28 @@ String basePath = request.getScheme() + "://" +
 			}
 		})
 
+		$("#updateRemarkBtn").click(function (){
+			var id=$("#remarkId").val();
+			var noteContent=$("#noteContent").val();
+			$.ajax({
+				url:"workbench/activity/updateRemark.do",
+				data:{
+					"id":id,
+					"noteContent":noteContent
+				},
+				method:"post",
+				dataType:"json",
+				success:function (data) {
+					if (data.success){
+						$("#h"+id).html(data.activityRemark.noteContent)
+						$("#s"+id).html(data.activityRemark.editTime+" 由"+data.activityRemark.editBy)
+					}else{
+						alert("修改备注失败");
+					}
+				}
+			})
+			$("#editRemarkModal").modal("hide")
+		})
 		remarkList();
 	});
 
@@ -114,10 +136,10 @@ String basePath = request.getScheme() + "://" +
 					html+='<div class="remarkDiv" style="height: 60px;" id="'+n.id+'">';
 					html+='<img title="zhangsan" src="image/user-thumbnail.png" style="width: 30px; height:30px;">';
 					html+='<div style="position: relative; top: -40px; left: 40px;" >';
-					html+='<h5>'+n.noteContent+'</h5>';
-					html+='<font color="gray">市场活动</font> <font color="gray">-</font> <b>'+'${activity.name}'+'</b> <small style="color: gray;"> '+(n.editFlag==1?n.editTime:n.createTime)+' 由'+(n.editFlag==1?n.editBy:n.createBy)+'</small>';
+					html+='<h5 id="h'+n.id+'">'+n.noteContent+'</h5>';
+					html+='<font color="gray">市场活动</font> <font color="gray">-</font> <b>'+'${activity.name}'+'</b> <small style="color: gray;" id="s'+n.id+'"> '+(n.editFlag==1?n.editTime:n.createTime)+' 由'+(n.editFlag==1?n.editBy:n.createBy)+'</small>';
 					html+='<div style="position: relative; left: 500px; top: -30px; height: 30px; width: 100px; display: none;">';
-					html+='<a class="myHref" href="javascript:void(0);" onclick=""><span class="glyphicon glyphicon-edit" style="font-size: 20px; color: #FF0000;"></span></a>';
+					html+='<a class="myHref" href="javascript:void(0);" onclick="updateRemark(\''+n.id+'\')"><span class="glyphicon glyphicon-edit" style="font-size: 20px; color: #FF0000;"></span></a>';
 					html+='&nbsp;&nbsp;&nbsp;&nbsp;';
 					html+='<a class="myHref" href="javascript:void(0);" onclick="removeRemark(\''+n.id+'\')"><span class="glyphicon glyphicon-remove" style="font-size: 20px; color: #FF0000;"></span></a>';
 					html+='</div>';
@@ -147,6 +169,12 @@ String basePath = request.getScheme() + "://" +
 		})
 	}
 
+	function updateRemark(id) {
+		var noteContent=$("#h"+id).html();
+		$("#noteContent").val(noteContent);
+		$("#remarkId").val(id);
+		$("#editRemarkModal").modal("show");
+	}
 
 </script>
 
