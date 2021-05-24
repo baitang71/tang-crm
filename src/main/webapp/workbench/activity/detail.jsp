@@ -53,6 +53,50 @@ String basePath = request.getScheme() + "://" +
 			$(this).children("span").css("color","#E6E6E6");
 		});
 
+		$("#remarkBody").on("mouseover",".remarkDiv",function(){
+			$(this).children("div").children("div").show();
+		})
+		$("#remarkBody").on("mouseout",".remarkDiv",function(){
+			$(this).children("div").children("div").hide();
+		})
+
+		$("#saveRemarkBtn").click(function (){
+			var noteContent=$("#remark").val()
+			if(noteContent==""){
+				alert("请添加备注内容!")
+			}else{
+				$.ajax({
+					url:"workbench/activity/saveActivityRemark.do",
+					data:{
+						"noteContent":noteContent,
+						"activityId":'${activity.id}'
+					},
+					method:"post",
+					dataType:"json",
+					success:function (data) {
+						if(data.success){
+							var html=""
+							html+='<div class="remarkDiv" style="height: 60px;" id="'+data.activityRemark.id+'">';
+							html+='<img title="zhangsan" src="image/user-thumbnail.png" style="width: 30px; height:30px;">';
+							html+='<div style="position: relative; top: -40px; left: 40px;" >';
+							html+='<h5>'+data.activityRemark.noteContent+'</h5>';
+							html+='<font color="gray">市场活动</font> <font color="gray">-</font> <b>'+'${activity.name}'+'</b> <small style="color: gray;"> '+(data.activityRemark.createTime)+' 由'+(data.activityRemark.createBy)+'</small>';
+							html+='<div style="position: relative; left: 500px; top: -30px; height: 30px; width: 100px; display: none;">';
+							html+='<a class="myHref" href="javascript:void(0);" onclick=""><span class="glyphicon glyphicon-edit" style="font-size: 20px; color: #FF0000;"></span></a>';
+							html+='&nbsp;&nbsp;&nbsp;&nbsp;';
+							html+='<a class="myHref" href="javascript:void(0);" onclick="removeRemark(\''+data.activityRemark.id+'\')"><span class="glyphicon glyphicon-remove" style="font-size: 20px; color: #FF0000;"></span></a>';
+							html+='</div>';
+							html+='</div>';
+							html+='</div>';
+							$("#remark-after").after(html)
+						}else{
+							alert("备注添加失败")
+						}
+					}
+				})
+			}
+		})
+
 		remarkList();
 	});
 
@@ -66,17 +110,16 @@ String basePath = request.getScheme() + "://" +
 			dataType:"json",
 			success:function (data) {
 				var html=""
-				var activityName="${activity.name}"
 				$.each(data,function (i,n){
-					html+='<div class="remarkDiv" style="height: 60px;">';
+					html+='<div class="remarkDiv" style="height: 60px;" id="'+n.id+'">';
 					html+='<img title="zhangsan" src="image/user-thumbnail.png" style="width: 30px; height:30px;">';
 					html+='<div style="position: relative; top: -40px; left: 40px;" >';
 					html+='<h5>'+n.noteContent+'</h5>';
 					html+='<font color="gray">市场活动</font> <font color="gray">-</font> <b>'+'${activity.name}'+'</b> <small style="color: gray;"> '+(n.editFlag==1?n.editTime:n.createTime)+' 由'+(n.editFlag==1?n.editBy:n.createBy)+'</small>';
 					html+='<div style="position: relative; left: 500px; top: -30px; height: 30px; width: 100px; display: none;">';
-					html+='<a class="myHref" href="javascript:void(0);"><span class="glyphicon glyphicon-edit" style="font-size: 20px; color: #E6E6E6;"></span></a>';
+					html+='<a class="myHref" href="javascript:void(0);" onclick=""><span class="glyphicon glyphicon-edit" style="font-size: 20px; color: #FF0000;"></span></a>';
 					html+='&nbsp;&nbsp;&nbsp;&nbsp;';
-					html+='<a class="myHref" href="javascript:void(0);"><span class="glyphicon glyphicon-remove" style="font-size: 20px; color: #E6E6E6;"></span></a>';
+					html+='<a class="myHref" href="javascript:void(0);" onclick="removeRemark(\''+n.id+'\')"><span class="glyphicon glyphicon-remove" style="font-size: 20px; color: #FF0000;"></span></a>';
 					html+='</div>';
 					html+='</div>';
 					html+='</div>';
@@ -85,7 +128,26 @@ String basePath = request.getScheme() + "://" +
 			}
 		})
 	}
-	
+
+	function removeRemark(id) {
+		$.ajax({
+			url:"workbench/activity/removeRemarkById.do",
+			data:{
+				"id":id
+			},
+			method:"post",
+			dataType: "json",
+			success:function (data) {
+				if(data.success){
+					$("#"+id).remove()
+				}else{
+					alert("备注删除失败")
+				}
+			}
+		})
+	}
+
+
 </script>
 
 </head>
@@ -248,8 +310,8 @@ String basePath = request.getScheme() + "://" +
 	</div>
 	
 	<!-- 备注 -->
-	<div style="position: relative; top: 30px; left: 40px;">
-		<div class="page-header">
+	<div style="position: relative; top: 30px; left: 40px;" id="remarkBody">
+		<div class="page-header" id="remark-after">
 			<h4>备注</h4>
 		</div>
 		
@@ -286,7 +348,7 @@ String basePath = request.getScheme() + "://" +
 				<textarea id="remark" class="form-control" style="width: 850px; resize : none;" rows="2"  placeholder="添加备注..."></textarea>
 				<p id="cancelAndSaveBtn" style="position: relative;left: 737px; top: 10px; display: none;">
 					<button id="cancelBtn" type="button" class="btn btn-default">取消</button>
-					<button type="button" class="btn btn-primary">保存</button>
+					<button type="button" class="btn btn-primary" id="saveRemarkBtn">保存</button>
 				</p>
 			</form>
 		</div>

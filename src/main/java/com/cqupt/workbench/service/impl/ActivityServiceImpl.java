@@ -11,9 +11,11 @@ import com.cqupt.workbench.exception.ActivityDeleteException;
 import com.cqupt.workbench.service.ActivityService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -95,4 +97,35 @@ public class ActivityServiceImpl implements ActivityService {
         List<ActivityRemark> remarkList=activityRemarkDao.selectByAid(id);
         return remarkList;
     }
+
+    @Override
+    public boolean removeRemarkById(String id) {
+        boolean flag=true;
+        int n=activityRemarkDao.removeRemarkById(id);
+        if (n!=1){
+            flag=false;
+        }
+        return flag;
+    }
+
+    @Override
+    public Map<String,Object> saveRemark(@RequestParam("activityId") String aid, String noteContent, String createBy) {
+        Map<String,Object> data=new HashMap<>();
+        ActivityRemark activityRemark=new ActivityRemark();
+        activityRemark.setActivityId(aid);
+        activityRemark.setId(UUIDUtil.getUUID());
+        activityRemark.setNoteContent(noteContent);
+        activityRemark.setCreateBy(createBy);
+        activityRemark.setCreateTime(DateTimeUtil.getSysTime());
+        activityRemark.setEditFlag("0");
+        int n=activityRemarkDao.saveRemark(activityRemark);
+        if (n==1){
+            data.put("activityRemark",activityRemark);
+            data.put("success",true);
+        }else{
+            data.put("success",false);
+        }
+        return data;
+    }
+
 }

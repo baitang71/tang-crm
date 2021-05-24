@@ -127,4 +127,21 @@ public class ActivityController {
         System.out.println(remarkList);
         return remarkList;
     }
+
+    @RequestMapping("/removeRemarkById.do")
+    @ResponseBody
+    public Map<String,Object> doRemoveById(String id){
+        Map<String,Object> data=new HashMap<>();
+        boolean flag=activityService.removeRemarkById(id);
+        data.put("success",flag);
+        return data;
+    }
+
+    @RequestMapping("/saveActivityRemark.do")
+    @ResponseBody
+    public Map<String,Object> doSaveRemark(@RequestParam("activityId") String aid,String noteContent,HttpServletRequest request){
+        String createName=((User)request.getSession().getAttribute("user")).getName();
+        Map<String,Object> data=activityService.saveRemark(aid,noteContent,createName);
+        return data;
+    }
 }

@@ -31,4 +31,21 @@
     <select id="selectByAid" resultType="activityRemark">
         select * from tbl_activity_remark where activityId=#{id}
     </select>
+
+    <delete id="removeRemarkById">
+        delete from tbl_activity_remark where id=#{id}
+    </delete>
+
+    <insert id="saveRemark">
+        insert into tbl_activity_remark(id,noteContent,createTime,createBy,editFlag,activityId)
+        values (
+            #{id},
+            #{noteContent},
+            #{createTime},
+            #{createBy},
+            #{editFlag},
+            #{activityId}
+        )
+
+    </insert>
 </mapper>

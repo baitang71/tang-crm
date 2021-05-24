@@ -22,4 +22,9 @@ public interface ActivityService {
     ModelAndView detailById(String id);
 
     List<ActivityRemark> getRemarkListByAid(String id);
+
+    boolean removeRemarkById(String id);
+
+    Map<String,Object> saveRemark(String aid, String noteContent,String createBy);
+
 }
