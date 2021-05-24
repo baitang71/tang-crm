@@ -27,4 +27,8 @@
                 #{aid}
             </foreach>
     </delete>
+
+    <select id="selectByAid" resultType="activityRemark">
+        select * from tbl_activity_remark where activityId=#{id}
+    </select>
 </mapper>

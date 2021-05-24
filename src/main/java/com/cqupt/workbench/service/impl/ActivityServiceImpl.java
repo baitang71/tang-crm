@@ -6,10 +6,12 @@ import com.cqupt.vo.PageListVo;
 import com.cqupt.workbench.dao.ActivityDao;
 import com.cqupt.workbench.dao.ActivityRemarkDao;
 import com.cqupt.workbench.domain.Activity;
+import com.cqupt.workbench.domain.ActivityRemark;
 import com.cqupt.workbench.exception.ActivityDeleteException;
 import com.cqupt.workbench.service.ActivityService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -78,5 +80,19 @@ public class ActivityServiceImpl implements ActivityService {
             flag=false;
         }
         return flag;
+    }
+
+    @Override
+    public ModelAndView detailById(String id) {
+        ModelAndView mv=new ModelAndView();
+        Activity activity=activityDao.detailById(id);
+        mv.addObject("activity",activity);
+        return mv;
+    }
+
+    @Override
+    public List<ActivityRemark> getRemarkListByAid(String id) {
+        List<ActivityRemark> remarkList=activityRemarkDao.selectByAid(id);
+        return remarkList;
     }
 }

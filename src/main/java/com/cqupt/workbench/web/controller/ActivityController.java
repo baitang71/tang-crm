@@ -5,11 +5,13 @@ import com.cqupt.settings.domain.User;
 import com.cqupt.settings.service.UserService;
 import com.cqupt.vo.PageListVo;
 import com.cqupt.workbench.domain.Activity;
+import com.cqupt.workbench.domain.ActivityRemark;
 import com.cqupt.workbench.service.ActivityService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -108,5 +110,21 @@ public class ActivityController {
         Map<String,Object> data=new HashMap<>();
         data.put("success",flag);
         return data;
+    }
+
+    @RequestMapping("/detail.do")
+    @ResponseBody
+    public ModelAndView doDetail(String id){
+        ModelAndView mv=activityService.detailById(id);
+        mv.setViewName("detail");
+        return mv;
+    }
+
+    @RequestMapping("/getRemarkList.do")
+    @ResponseBody
+    public List<ActivityRemark> doRemarkList(String id){
+        List<ActivityRemark> remarkList=activityService.getRemarkListByAid(id);
+        System.out.println(remarkList);
+        return remarkList;
     }
 }
