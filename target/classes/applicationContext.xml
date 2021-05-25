@@ -25,11 +25,11 @@
         <property name="basePackage" value="com.cqupt.settings.dao,com.cqupt.workbench.dao"/>
     </bean>
 
-
     <!--开启事务-->
     <bean id="dataSourceTransactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
         <property name="dataSource" ref="dataSource"/>
     </bean>
+    
     <tx:annotation-driven transaction-manager="dataSourceTransactionManager"/>
 
 </beans>
