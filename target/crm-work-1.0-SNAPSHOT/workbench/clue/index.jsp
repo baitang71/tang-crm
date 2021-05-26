@@ -1,14 +1,15 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
 <%
-String basePath = request.getScheme() + "://" +
-request.getServerName() + ":" + request.getServerPort() +
-request.getContextPath() + "/";
+	String basePath = request.getScheme() + "://" +
+			request.getServerName() + ":" + request.getServerPort() +
+			request.getContextPath() + "/";
 %>
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
 	<base href="<%=basePath%>"/>
+<meta charset="UTF-8">
 <link href="jquery/bootstrap_3.3.0/css/bootstrap.min.css" type="text/css" rel="stylesheet" />
 <link href="jquery/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.min.css" type="text/css" rel="stylesheet" />
 
@@ -21,7 +22,21 @@ request.getContextPath() + "/";
 
 	$(function(){
 		
-		
+		$("#saveBtn").click(function (){
+			$.ajax({
+				url:"workbench/clue/getUsers.do",
+				method:"get",
+				dataType:"json",
+				success:function (data) {
+					var html="<option></option>"
+					$.each(data,function (i,n) {
+						html+="<option value='"+n.id+"'>"+n.name+"</option>"
+					})
+					$("#create-owner").html(html)
+				}
+			})
+			$("#createClueModal").modal("show")
+		})
 		
 	});
 	
@@ -45,10 +60,8 @@ request.getContextPath() + "/";
 						<div class="form-group">
 							<label for="create-clueOwner" class="col-sm-2 control-label">所有者<span style="font-size: 15px; color: red;">*</span></label>
 							<div class="col-sm-10" style="width: 300px;">
-								<select class="form-control" id="create-clueOwner">
-								  <option>zhangsan</option>
-								  <option>lisi</option>
-								  <option>wangwu</option>
+								<select class="form-control" id="create-owner">
+
 								</select>
 							</div>
 							<label for="create-company" class="col-sm-2 control-label">公司<span style="font-size: 15px; color: red;">*</span></label>
@@ -61,12 +74,17 @@ request.getContextPath() + "/";
 							<label for="create-call" class="col-sm-2 control-label">称呼</label>
 							<div class="col-sm-10" style="width: 300px;">
 								<select class="form-control" id="create-call">
-								  <option></option>
-								  <option>先生</option>
-								  <option>夫人</option>
-								  <option>女士</option>
-								  <option>博士</option>
-								  <option>教授</option>
+
+									<option></option>
+									<c:forEach items="${appellationList}" var="appellation">
+										<option value="${appellation.id}">${appellation.value}</option>
+									</c:forEach>
+									<%--<option></option>
+									<option>先生</option>
+									<option>夫人</option>
+									<option>女士</option>
+									<option>博士</option>
+									<option>教授</option>--%>
 								</select>
 							</div>
 							<label for="create-surname" class="col-sm-2 control-label">姓名<span style="font-size: 15px; color: red;">*</span></label>
@@ -105,14 +123,19 @@ request.getContextPath() + "/";
 							<label for="create-status" class="col-sm-2 control-label">线索状态</label>
 							<div class="col-sm-10" style="width: 300px;">
 								<select class="form-control" id="create-status">
-								  <option></option>
+
+									<option></option>
+									<c:forEach items="${clueStateList}" var="clueState">
+										<option value="${clueState.id}">${clueState.value}</option>
+									</c:forEach>
+								 <%-- <option></option>
 								  <option>试图联系</option>
 								  <option>将来联系</option>
 								  <option>已联系</option>
 								  <option>虚假线索</option>
 								  <option>丢失线索</option>
 								  <option>未联系</option>
-								  <option>需要条件</option>
+								  <option>需要条件</option>--%>
 								</select>
 							</div>
 						</div>
@@ -121,7 +144,11 @@ request.getContextPath() + "/";
 							<label for="create-source" class="col-sm-2 control-label">线索来源</label>
 							<div class="col-sm-10" style="width: 300px;">
 								<select class="form-control" id="create-source">
-								  <option></option>
+									<option></option>
+									<c:forEach items="${sourceList}" var="source">
+										<option value="${source.id}">${source.value}</option>
+									</c:forEach>
+								  <%--<option></option>
 								  <option>广告</option>
 								  <option>推销电话</option>
 								  <option>员工介绍</option>
@@ -135,7 +162,7 @@ request.getContextPath() + "/";
 								  <option>交易会</option>
 								  <option>web下载</option>
 								  <option>web调研</option>
-								  <option>聊天</option>
+								  <option>聊天</option>--%>
 								</select>
 							</div>
 						</div>
@@ -444,7 +471,7 @@ request.getContextPath() + "/";
 			</div>
 			<div class="btn-toolbar" role="toolbar" style="background-color: #F7F7F7; height: 50px; position: relative;top: 40px;">
 				<div class="btn-group" style="position: relative; top: 18%;">
-				  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createClueModal"><span class="glyphicon glyphicon-plus"></span> 创建</button>
+				  <button type="button" class="btn btn-primary" data-toggle="modal" id="saveBtn"><span class="glyphicon glyphicon-plus"></span> 创建</button>
 				  <button type="button" class="btn btn-default" data-toggle="modal" data-target="#editClueModal"><span class="glyphicon glyphicon-pencil"></span> 修改</button>
 				  <button type="button" class="btn btn-danger"><span class="glyphicon glyphicon-minus"></span> 删除</button>
 				</div>

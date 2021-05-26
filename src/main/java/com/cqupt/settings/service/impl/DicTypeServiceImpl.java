@@ -26,7 +26,7 @@ public class DicTypeServiceImpl implements DicTypeService {
         List<DicType> dicTypes=dicTypeDao.selectAll();
         for (DicType dicType:dicTypes){
             List<DicValue> dicValues=dicValueDao.selectByCode(dicType.getCode());
-            map.put(dicType.getName(),dicValues);
+            map.put(dicType.getCode()+"List",dicValues);
         }
         return map;
     }
