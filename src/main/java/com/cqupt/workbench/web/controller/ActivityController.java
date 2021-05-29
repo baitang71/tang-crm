@@ -116,7 +116,7 @@ public class ActivityController {
     @ResponseBody
     public ModelAndView doDetail(String id){
         ModelAndView mv=activityService.detailById(id);
-        mv.setViewName("detail");
+        mv.setViewName("activity/detail");
         return mv;
     }
 

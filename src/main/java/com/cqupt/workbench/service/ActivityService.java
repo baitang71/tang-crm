@@ -28,4 +28,6 @@ public interface ActivityService {
     Map<String,Object> saveRemark(String aid, String noteContent,String createBy);
 
     Map<String, Object> updateRemark(String aid, String noteContent, String editName);
+
+    List<Activity> selectByName(String aname);
 }

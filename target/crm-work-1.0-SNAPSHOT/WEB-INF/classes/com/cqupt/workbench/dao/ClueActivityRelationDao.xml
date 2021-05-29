@@ -5,8 +5,34 @@
 
 <mapper namespace="com.cqupt.workbench.dao.ClueActivityRelationDao">
 	
-	
-  	
+	<select id="selectActivities" resultType="activity">
+        select
+            ac.id,
+            u.name as owner,
+            a.name,
+            a.startDate,
+            a.endDate
+        from tbl_clue_activity_relation ac
+        join tbl_activity a
+        on ac.activityId=a.id
+        join tbl_user u
+        on a.owner=u.id
+        where ac.clueId=#{id}
+    </select>
+
+    <delete id="deleteById">
+        delete from tbl_clue_activity_relation
+        where id=#{id}
+    </delete>
+
+    <insert id="makeRelation">
+        insert into tbl_clue_activity_relation(id,clueId,activityId)
+        values(
+            #{id},
+            #{clueId},
+            #{activityId}
+        )
+    </insert>
 </mapper>
 
 

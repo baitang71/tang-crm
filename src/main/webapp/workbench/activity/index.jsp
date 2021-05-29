@@ -242,6 +242,7 @@ request.getContextPath() + "/";
 						success:function (data) {
 							if(data.success){
 								alert("删除成功")
+								$("#check-all").prop("checked",false);
 								pageList(1,$("#activityPage").bs_pagination('getOption', 'rowsPerPage'));
 							}else{
 								alert("删除失败")

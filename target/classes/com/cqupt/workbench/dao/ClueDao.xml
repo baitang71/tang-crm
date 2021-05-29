@@ -5,8 +5,128 @@
 
 <mapper namespace="com.cqupt.workbench.dao.ClueDao">
 	
-	
-  	
+	<insert id="save">
+        insert into tbl_clue(
+            id,
+            fullname,
+            appellation,
+            owner,
+            company,
+            job,
+            email,
+            phone,
+            website,
+            mphone,
+            state,
+            source,
+            createBy,
+            createTime,
+            description,
+            contactSummary,
+            nextContactTime,
+            address
+        )
+        values (
+            #{id},
+            #{fullname},
+            #{appellation},
+            #{owner},
+            #{company},
+            #{job},
+            #{email},
+            #{phone},
+            #{website},
+            #{mphone},
+            #{state},
+            #{source},
+            #{createBy},
+            #{createTime},
+            #{description},
+            #{contactSummary},
+            #{nextContactTime},
+            #{address}
+        )
+    </insert>
+
+    <select id="pageList" resultType="clue">
+        select
+            c.id,
+            c.fullname,
+            c.appellation,
+            u.name as owner,
+            c.company,
+            c.job,
+            c.email,
+            c.phone,
+            c.website,
+            c.mphone,
+            c.state,
+            c.source,
+            c.createBy,
+            c.createTime,
+            c.description,
+            c.contactSummary,
+            c.nextContactTime,
+            c.address
+        from tbl_clue c
+        join tbl_user u
+        on c.owner=u.id
+        <where>
+            <if test="clue.fullname!=null and clue.fullname!=''">
+                c.fullname like '%' #{clue.fullname} '%'
+            </if>
+            <if test="clue.company!=null and clue.company!=''">
+                and c.company like '%' #{clue.company} '%'
+            </if>
+            <if test="clue.owner!=null and clue.owner!=''">
+                and u.name like '%' #{clue.owner} '%'
+            </if>
+            <if test="clue.phone!=null and clue.phone!=''">
+                and c.phone like '%' #{clue.phone} '%'
+            </if>
+            <if test="clue.mphone!=null and clue.mphone!=''">
+                and c.mphone like '%' #{clue.mphone} '%'
+            </if>
+            <if test="clue.source!=null and clue.source!=''">
+                and c.source like '%' #{clue.source} '%'
+            </if>
+            <if test="clue.state!=null and clue.state!=''">
+                and c.state like '%' #{clue.state} '%'
+            </if>
+        </where>
+        order by c.createTime desc
+        limit #{skip},#{size}
+    </select>
+
+    <select id="allCount" resultType="int">
+        select count(*) from tbl_clue;
+    </select>
+
+    <select id="getDetailById" resultType="clue">
+        select
+        c.id,
+        c.fullname,
+        c.appellation,
+        u.name as owner,
+        c.company,
+        c.job,
+        c.email,
+        c.phone,
+        c.website,
+        c.mphone,
+        c.state,
+        c.source,
+        c.createBy,
+        c.createTime,
+        c.description,
+        c.contactSummary,
+        c.nextContactTime,
+        c.address
+        from tbl_clue c
+        join tbl_user u
+        on c.owner=u.id
+        where c.id=#{id}
+    </select>
 </mapper>
 
 

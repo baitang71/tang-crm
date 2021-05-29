@@ -1,6 +1,7 @@
 package com.cqupt.workbench.dao;
 
 import com.cqupt.workbench.domain.Activity;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
@@ -19,4 +20,8 @@ public interface ActivityDao {
     int update(Activity activity);
 
     Activity detailById(String id);
+
+    List<Activity> unRelate(@Param("sname") String sname,@Param("id") String id);
+
+    List<Activity> selectByName(String aname);
 }
