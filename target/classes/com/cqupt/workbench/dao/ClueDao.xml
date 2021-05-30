@@ -127,6 +127,33 @@
         on c.owner=u.id
         where c.id=#{id}
     </select>
+
+    <select id="selectById" resultType="clue">
+        select
+        id,
+        fullname,
+        appellation,
+        owner,
+        company,
+        job,
+        email,
+        phone,
+        website,
+        mphone,
+        state,
+        source,
+        createBy,
+        createTime,
+        description,
+        contactSummary,
+        nextContactTime,
+        address
+        from tbl_clue where id=#{id}
+    </select>
+
+    <delete id="deleteById">
+        delete from tbl_clue where id=#{clueId}
+    </delete>
 </mapper>
 
 

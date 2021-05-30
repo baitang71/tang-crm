@@ -188,6 +188,7 @@ request.getContextPath() + "/";
 		    <input type="text" class="form-control" id="activity" placeholder="点击上面搜索" readonly>
 			  <input type="hidden" id="activityId" name="activityId"/>
 			  <input type="hidden" name="clueId" value="${param.clueId}"/>
+			  <input type="hidden" name="flag" value="true"/>
 		  </div>
 		</form>
 		

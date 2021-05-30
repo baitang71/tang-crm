@@ -6,6 +6,7 @@ import com.cqupt.utils.DateTimeUtil;
 import com.cqupt.utils.UUIDUtil;
 import com.cqupt.workbench.domain.Activity;
 import com.cqupt.workbench.domain.Clue;
+import com.cqupt.workbench.domain.Tran;
 import com.cqupt.workbench.service.ActivityService;
 import com.cqupt.workbench.service.ClueService;
 import org.springframework.stereotype.Controller;
@@ -15,6 +16,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -103,11 +106,30 @@ public class ClueController {
         return activities;
     }
 
-
-   /* @RequestMapping("/tran.do")
+    @RequestMapping("/makeRelation.do")
     @ResponseBody
-    public List<Activity> doTran(String data){
-        List<Activity> activities=activityService.selectByName(aname);
-        return activities;
-    }*/
+    public Map<String,Object> doMakeRelation(HttpServletRequest request){
+        Map<String,Object> data=new HashMap<>();
+        String[] activityIds=request.getParameterValues("id");
+        String clueId=request.getParameter("clueId");
+        boolean flag=clueService.makeRelation(activityIds,clueId);
+        data.put("success",flag);
+        return data;
+    }
+
+
+    @RequestMapping("/tran.do")
+    @ResponseBody
+    public void doTran(Tran tran, String flag, String clueId, HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String createBy=((User)(request.getSession()).getAttribute("user")).getName();
+        if ("true".equals(flag)){
+            tran.setId(UUIDUtil.getUUID());
+            tran.setCreateBy(createBy);
+            tran.setCreateTime(DateTimeUtil.getSysTime());
+        }
+        boolean result=clueService.convert(tran,clueId,createBy);
+        if (result){
+            response.sendRedirect(request.getContextPath()+"/workbench/clue/index.jsp");
+        }
+    }
 }

@@ -2,6 +2,7 @@ package com.cqupt.workbench.service;
 
 import com.cqupt.workbench.domain.Activity;
 import com.cqupt.workbench.domain.Clue;
+import com.cqupt.workbench.domain.Tran;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
@@ -22,4 +23,6 @@ public interface ClueService {
     List<Activity> selectActivities(String sname, String id);
 
     boolean makeRelation(String[] activityIds, String clueId);
+
+    boolean convert(Tran tran, String clueId, String createBy);
 }

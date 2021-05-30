@@ -15,4 +15,6 @@ public interface ClueActivityRelationDao {
     int deleteById(String id);
 
     int makeRelation(ClueActivityRelation relation);
+
+    List<ClueActivityRelation> selectByClueId(String clueId);
 }
